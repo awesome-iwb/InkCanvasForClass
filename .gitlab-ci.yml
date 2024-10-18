@@ -1,3 +1,4 @@
+image: mcr.microsoft.com/dotnet/framework/sdk:4.7.2
 
 variables:
   EXE_RELEASE_FOLDER: 'InkCanvasForClass\bin\Debug'
