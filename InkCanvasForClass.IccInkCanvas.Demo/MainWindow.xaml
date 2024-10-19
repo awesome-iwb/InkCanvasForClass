@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:InkCanvasForClass.IccInkCanvas.Demo"
         xmlns:iccInkCanvas="clr-namespace:InkCanvasForClass.IccInkCanvas;assembly=InkCanvasForClass.IccInkCanvas"
         mc:Ignorable="d"
-        Title="MainWindow" Height="850" Width="800">
+        Title="MainWindow" Height="950" Width="800">
     <Grid>
         <StackPanel Orientation="Vertical" Margin="8">
             <TextBlock FontSize="24">IccInkCanvasDemo</TextBlock>
@@ -48,7 +48,16 @@
             <TextBlock Name="TimeMachineTextBlock"/>
             <WrapPanel Orientation="Horizontal">
                 <Button Content="Undo" Click="Undo_ButtonClick"/>
+                <Button Content="Undo 2" Click="Undo2_ButtonClick"/>
                 <Button Content="Redo" Click="Redo_ButtonClick"/>
+                <Button Content="Redo 2" Click="Redo2_ButtonClick"/>
+            </WrapPanel>
+            <TextBlock Text="TimeMachineV2 Test"/>
+            <TextBlock Name="TimeMachineV2Status"/>
+            <WrapPanel Orientation="Horizontal">
+                <Button Content="PushTestAction" Click="PushTestAction_TimeMachineV2_ButtonClick"/>
+                <Button Content="Undo" Click="Undo_TimeMachineV2_ButtonClick"/>
+                <Button Content="Redo" Click="Redo_TimeMachineV2_ButtonClick"/>
             </WrapPanel>
         </StackPanel>
     </Grid>

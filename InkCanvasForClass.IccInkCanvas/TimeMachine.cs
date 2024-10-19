@@ -102,7 +102,7 @@ namespace InkCanvasForClass.IccInkCanvas {
         /// 撤销
         /// </summary>
         /// <returns></returns>
-        public TimeMachineHistory Undo() {
+        public TimeMachineHistory Undo(bool doNotNotifyStateUpdate = false) {
             if (!(_currentIndex > -1)) return null;
 
             // 如果当前的墨迹是被创建了，就修改为指示被清除
@@ -112,7 +112,7 @@ namespace InkCanvasForClass.IccInkCanvas {
             var index = Math.Min(Math.Max(_currentIndex - 1, -1), _currentStrokeHistory.Count - 1);
             _currentIndex = index;
             
-            NotifyUndoRedoState();
+            if (!doNotNotifyStateUpdate) NotifyUndoRedoState();
             return item;
         }
 
@@ -122,21 +122,12 @@ namespace InkCanvasForClass.IccInkCanvas {
         /// <param name="steps"></param>
         /// <returns></returns>
         public TimeMachineHistory[] Undo(int steps = 1) {
-            var index = Math.Min(Math.Max(_currentIndex - steps, -1), _currentStrokeHistory.Count - 1);
+            var histories = new List<TimeMachineHistory>();
 
-            List<TimeMachineHistory> histories = new List<TimeMachineHistory>();
-
-            // 如果当前的墨迹是被创建了，就修改为指示被清除（指定步长）
-            for (var i = 0; i < _currentStrokeHistory.Count; i++) {
-                if (i >= index && i <= _currentIndex) {
-                    var item = _currentStrokeHistory[i];
-                    item.StrokeHasBeenCleared = !item.StrokeHasBeenCleared;
-                    histories.Add(item);
-                }
+            for (int i = 0; i < steps; i++) {
+                var item = Undo(true);
+                if (item != null) histories.Add(item);
             }
-
-            _currentIndex = index;
-            
             NotifyUndoRedoState();
             return histories.ToArray();
         }
@@ -145,7 +136,7 @@ namespace InkCanvasForClass.IccInkCanvas {
         /// 重做
         /// </summary>
         /// <returns></returns>
-        public TimeMachineHistory Redo() {
+        public TimeMachineHistory Redo(bool doNotNotifyStateUpdate = false) {
             if (!(_currentStrokeHistory.Count - _currentIndex - 1 > 0)) return null;
             var index = Math.Min(Math.Max(_currentIndex + 1, -1), _currentStrokeHistory.Count - 1);
 
@@ -155,7 +146,7 @@ namespace InkCanvasForClass.IccInkCanvas {
 
             _currentIndex = index;
 
-            NotifyUndoRedoState();
+            if (!doNotNotifyStateUpdate) NotifyUndoRedoState();
             return item;
         }
 
@@ -165,21 +156,12 @@ namespace InkCanvasForClass.IccInkCanvas {
         /// <param name="steps"></param>
         /// <returns></returns>
         public TimeMachineHistory[] Redo(int steps = 1) {
-            var index = Math.Min(Math.Max(_currentIndex + 1, -1), _currentStrokeHistory.Count - 1);
+            var histories = new List<TimeMachineHistory>();
 
-            List<TimeMachineHistory> histories = new List<TimeMachineHistory>();
-
-            // 如果当前的墨迹是被清除了，就修改为指示已创建
-            for (var i = 0; i < _currentStrokeHistory.Count; i++) {
-                if (i >= _currentIndex && i <= index) {
-                    var item = _currentStrokeHistory[i];
-                    item.StrokeHasBeenCleared = !item.StrokeHasBeenCleared;
-                    histories.Add(item);
-                }
+            for (int i = 0; i < steps; i++) {
+                var item = Redo(true);
+                if (item != null) histories.Add(item);
             }
-
-            _currentIndex = index;
-
             NotifyUndoRedoState();
             return histories.ToArray();
         }

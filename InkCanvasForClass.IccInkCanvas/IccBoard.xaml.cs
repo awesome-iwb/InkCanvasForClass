@@ -1032,8 +1032,12 @@ namespace InkCanvasForClass.IccInkCanvas {
                 (_edittingMode == EditingMode.GeometryErasing || _edittingMode == EditingMode.AreaErasing)) {
                 if (AddedStroke == null) AddedStroke = new StrokeCollection();
                 if (ReplacedStroke == null) ReplacedStroke = new StrokeCollection();
-                AddedStroke.Add(eventArgs.Added);
-                ReplacedStroke.Add(eventArgs.Removed);
+                try {
+                    AddedStroke.Add(eventArgs.Added);
+                    ReplacedStroke.Add(eventArgs.Removed);
+                }
+                catch {}
+                Trace.WriteLine(ReplacedStroke.Count);
                 return;
             }
 
@@ -1125,8 +1129,20 @@ namespace InkCanvasForClass.IccInkCanvas {
         /// </summary>
         public void Undo() {
             if (!_isTimeMachineThreadTaskDone) return;
-            var history = CurrentPageItem.TimeMachine.Undo();
+            var history = CurrentPageItem.TimeMachine.Undo(false);
             if (history != null) ApplyHistoryToPage(CurrentPageItem,history);
+        }
+
+        /// <summary>
+        /// 多步撤销（仅针对当前激活页面）
+        /// </summary>
+        public void Undo(int steps = 1) {
+            if (!_isTimeMachineThreadTaskDone) return;
+            var histories = CurrentPageItem.TimeMachine.Undo(steps);
+            if (histories.Length <= 0) return;
+            foreach (var history in histories) {
+                ApplyHistoryToPage(CurrentPageItem,history);
+            }
         }
 
         /// <summary>
@@ -1134,8 +1150,20 @@ namespace InkCanvasForClass.IccInkCanvas {
         /// </summary>
         public void Redo() {
             if (!_isTimeMachineThreadTaskDone) return;
-            var history = CurrentPageItem.TimeMachine.Redo();
+            var history = CurrentPageItem.TimeMachine.Redo(false);
             if (history != null) ApplyHistoryToPage(CurrentPageItem,history);
+        }
+
+        /// <summary>
+        /// 多步撤销（仅针对当前激活页面）
+        /// </summary>
+        public void Redo(int steps = 1) {
+            if (!_isTimeMachineThreadTaskDone) return;
+            var histories = CurrentPageItem.TimeMachine.Redo(steps);
+            if (histories.Length <= 0) return;
+            foreach (var history in histories) {
+                ApplyHistoryToPage(CurrentPageItem,history);
+            }
         }
 
         #endregion

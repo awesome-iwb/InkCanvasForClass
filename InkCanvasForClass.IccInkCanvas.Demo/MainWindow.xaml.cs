@@ -20,6 +20,8 @@ namespace InkCanvasForClass.IccInkCanvas.Demo {
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window {
+        private TimeMachineV2 tm = new TimeMachineV2();
+
         public MainWindow() {
             InitializeComponent();
             RegisterEventsForBoardSettings();
@@ -31,6 +33,11 @@ namespace InkCanvasForClass.IccInkCanvas.Demo {
             };
             IccBoard.UndoRedoStateChanged += (sender, args) => {
                 TimeMachineTextBlock.Text = $"CurrentPageHistoriesCount:{IccBoard.CurrentPageHistoriesCount}   CanUndo:{IccBoard.CanUndo}   CanRedo:{IccBoard.CanRedo}";
+            };
+
+            TimeMachineV2Status.Text = $"Current: {tm.CurrentIndex}   Count: {tm.ActionsCount}";
+            tm.UndoRedoStateChanged += (_, __) => {
+                TimeMachineV2Status.Text = $"Current: {tm.CurrentIndex}   Count: {tm.ActionsCount}";
             };
         }
 
@@ -126,6 +133,23 @@ namespace InkCanvasForClass.IccInkCanvas.Demo {
         }
         private void Redo_ButtonClick(object sender, RoutedEventArgs e) {
             IccBoard.Redo();
+        }
+        private void Undo2_ButtonClick(object sender, RoutedEventArgs e) {
+            IccBoard.Undo(2);
+        }
+        private void Redo2_ButtonClick(object sender, RoutedEventArgs e) {
+            IccBoard.Redo(2);
+        }
+
+        private void PushTestAction_TimeMachineV2_ButtonClick(object sender, RoutedEventArgs e) {
+            tm.PushTestAction();
+        }
+
+        private void Undo_TimeMachineV2_ButtonClick(object sender, RoutedEventArgs e) {
+            tm.Undo(false);
+        }
+        private void Redo_TimeMachineV2_ButtonClick(object sender, RoutedEventArgs e) {
+            tm.Redo();
         }
     }
 }
