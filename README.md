@@ -1,9 +1,17 @@
 <div align="center">
 
-# InkCanvasForClass
+<img src="./icc-new-icon.png" width="96">
 
-可能是最好用的教学批注软件<br/>
-**基于 `InkCanvas` 控件的倔强**
+# icc!future
+
+![GitLab Contributors](https://img.shields.io/gitlab/contributors/62768293?style=flat-square)
+![GitLab Last Commit](https://img.shields.io/gitlab/last-commit/62768293?style=flat-square)
+
+
+原名：`InkCanvasForClass`<br/>
+可能是最好用的教学批注软件，欲火重生<br/>
+
+**基于 `InkCanvas` 控件的又一次倔强**
 
 </div>
 
