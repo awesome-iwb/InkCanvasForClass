@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="IccBoardPage.cs" />
     <Compile Include="IccDispatcherInkCanvasInfo.cs" />
+    <Compile Include="Icc\InkBoard.cs" />
     <Compile Include="Settings\BoardSettings.cs" />
     <Compile Include="IccBoard.xaml.cs">
       <DependentUpon>IccBoard.xaml</DependentUpon>
@@ -100,5 +101,6 @@
       <Version>2024.2.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
